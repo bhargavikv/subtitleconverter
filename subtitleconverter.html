@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Subtitle Converter</title>
+</head>
+
+<body>
+	<input type="file" name="inputfile" id="inputfile">
+	<br><br><br>
+    <button id="clipboard">Copy text</button>
+    <br><br>
+
+	<!-- <pre id="output"></pre> -->
+    <textarea id="output" name="w3review" rows="500" cols="100">This will be replaced by the resultant string.</textarea>
+	
+	<script type="text/javascript">
+		document.getElementById('inputfile')
+			.addEventListener('change', function() {
+			
+			var fr=new FileReader(); // 
+			fr.onload=function(){
+                let result = fr.result;
+                result = result.replaceAll(/WEBVTT/g,"");
+                result = result.replaceAll(/ï»¿/g,"");
+                result = result.replaceAll(/ â�� /g," ");
+                result = result.replaceAll(/[0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9] --> [0-9][0-9]:[0-9][0-9].[0-9][0-9][0-9]/g, '');
+                result = result.replaceAll(/[\r\n ]+/g," ");
+                result = result.replaceAll(/ â /g," - ");
+                result = result.replaceAll(/â/g,"'");
+				document.getElementById('output').textContent=result;
+			}
+			
+			fr.readAsText(this.files[0]);
+		})
+
+        document.getElementById('clipboard')
+			.addEventListener('click', function() {
+            /* Get the text field */
+            var copyText = document.getElementById("output");
+
+            /* Select the text field */
+            copyText.select();
+            copyText.setSelectionRange(0, copyText.value.length); /* For mobile devices */
+
+            /* Copy the text inside the text field */
+            navigator.clipboard.writeText(copyText.value);
+
+            /* Alert the copied text */
+            alert("Copied the text to clipboard ");
+        })
+	</script>
+</body>
+
+</html>
